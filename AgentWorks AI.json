@@ -1,0 +1,462 @@
+{
+  "name": "AgentWorks AI",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -736,
+        -48
+      ],
+      "id": "ded0b89e-a46f-4601-babe-32ab8d8c1432",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Uie60w6zo1WR1EZL",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "Customer Email",
+              "description": "Emails sent by potential or existing customers that involve inquiries about the company’s products, services, pricing, features, implementation, support, policies, timelines, or business offerings.\n\nThese emails usually:\nAsk about cost, plans, or quotations \nRequest details of services or solutions \nSeek clarification on policies, support, or workflows \nShow purchase intent or business interest \n\nExample indicators: \npricing, cost, services offered, how it works, support provided, plans, quotation, proposal, implementation, product details"
+            },
+            {
+              "category": "Non Customer Email",
+              "description": "All emails that are not related to business offerings or customer inquiries. These do not involve questions about products, services, pricing, or company policies.\n\nThis category includes:\nInternal communication\nMarketing promotional \nemails Newsletters \nSpam Personal messages\nJob applications System \nnotifications\n\nExample indicators: \nmeeting updates, resumes, promotions, subscriptions, greetings, system alerts, general info"
+            }
+          ]
+        },
+        "options": {
+          "enableAutoFixing": true
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        -496,
+        -48
+      ],
+      "id": "56d94d29-f1b1-447d-b47f-c62d34b18701",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -576,
+        160
+      ],
+      "id": "4ec4a6d6-4503-4cb8-bdf9-c989bcfb1c0c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "nwbDruPv1si1Jkdv",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        -160,
+        160
+      ],
+      "id": "823cad1d-2e8e-451a-9c48-a39ea14de364",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Body of the email: {{ $json.text }}\nSubject of the email: {{ $json.subject }}",
+        "options": {
+          "systemMessage": "Whenever you get a query, first use the 'pinecone vector store' tool to fetch relevant information and generate the email for the query using the fetched information.\n\nAlso sign off the email as,\n*\nRegards\nTeam AgentWorks AI\n*"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -48,
+        -112
+      ],
+      "id": "b57d5647-af7a-4ac0-9c69-0c9dc3b32522",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Use this tool to fetch relevant information for user query.",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "agentworks-ai",
+          "mode": "list",
+          "cachedResultName": "agentworks-ai"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        80
+      ],
+      "id": "2f82939d-8b43-40a7-b8d2-4ab81625a2e0",
+      "name": "Pinecone Vector Store",
+      "credentials": {
+        "pineconeApi": {
+          "id": "JZXkpHbrwHd9ycDP",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        256
+      ],
+      "id": "aff096be-fbfd-45f8-9150-b10c913d0f0c",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "nwbDruPv1si1Jkdv",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "triggerOn": "specificFolder",
+        "folderToWatch": {
+          "__rl": true,
+          "value": "19vPB7yUdF6EFrv8ULPrXs0KhSrGA_AFe",
+          "mode": "list",
+          "cachedResultName": "AgentWorks AI",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/19vPB7yUdF6EFrv8ULPrXs0KhSrGA_AFe"
+        },
+        "event": "fileCreated",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDriveTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        432
+      ],
+      "id": "a5948fe6-1bc4-476e-9928-3328dd726049",
+      "name": "Google Drive Trigger",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "LGmS4TE3LCXlinH6",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -416,
+        432
+      ],
+      "id": "a0a22c43-6cb0-4c93-8bb5-8c3f16cf76d4",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "LGmS4TE3LCXlinH6",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "pineconeIndex": {
+          "__rl": true,
+          "value": "agentworks-ai",
+          "mode": "list",
+          "cachedResultName": "agentworks-ai"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePinecone",
+      "typeVersion": 1.3,
+      "position": [
+        -208,
+        432
+      ],
+      "id": "d8e1c8f7-8255-47d1-82ad-be2ec32eb7a2",
+      "name": "Pinecone Vector Store1",
+      "credentials": {
+        "pineconeApi": {
+          "id": "JZXkpHbrwHd9ycDP",
+          "name": "PineconeApi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "textSplittingMode": "custom",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -80,
+        640
+      ],
+      "id": "fa74f6d7-5ca1-412f-8bb2-5197e31b226a",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.textSplitterCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        816
+      ],
+      "id": "1d5f7c62-dda0-46fb-a14f-82799f7df8d4",
+      "name": "Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -272,
+        656
+      ],
+      "id": "7f74ecfa-7a58-4957-82d4-f3ac90a3e97d",
+      "name": "Embeddings OpenAI1",
+      "credentials": {
+        "openAiApi": {
+          "id": "nwbDruPv1si1Jkdv",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "reply",
+        "emailType": "text",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        -112
+      ],
+      "id": "d398c35c-72fe-44cd-a720-c8c422c327ae",
+      "name": "Reply to a message",
+      "webhookId": "9a02d258-d22e-4bdb-9458-26345208e6d5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Uie60w6zo1WR1EZL",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pinecone Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive Trigger": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Pinecone Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Reply to a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "2049bfc9-c62f-4eb8-ba23-1458a9d03975",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9b709ecef9751e58241ac015ce79c99e23722f41894bbf9141ed174f85153871"
+  },
+  "id": "YnuylxlgR7-Ttk-JZ4uAJ",
+  "tags": []
+}

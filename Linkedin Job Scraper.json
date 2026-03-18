@@ -1,0 +1,119 @@
+{
+  "name": "Linkedin Job Scraper",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -464,
+        -16
+      ],
+      "id": "8be48393-cb61-49ef-baa3-ab5095de49b1",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/bebity~linkedin-jobs-scraper/runs?token=apify_api_L1lx70zdvhV6iAVig0HwFgehgUTQTJ20RqxA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"contractType\": \"F\",\n    \"experienceLevel\": \"2\",\n    \"location\": \"India\",\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"publishedAt\": \"r86400\",\n    \"rows\": 20,\n    \"title\": \"AI/ML Developer\",\n    \"workType\": \"1\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -256,
+        -16
+      ],
+      "id": "5c9c861c-2dfd-47a1-825a-d9762d62f4e1",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "https://api.apify.com/v2/acts/bebity~linkedin-jobs-scraper/runs/last/dataset/items?token=apify_api_L1lx70zdvhV6iAVig0HwFgehgUTQTJ20RqxA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"contractType\": \"F\",\n    \"experienceLevel\": \"2\",\n    \"location\": \"India\",\n    \"proxy\": {\n        \"useApifyProxy\": true,\n        \"apifyProxyGroups\": [\n            \"RESIDENTIAL\"\n        ]\n    },\n    \"publishedAt\": \"r86400\",\n    \"rows\": 20,\n    \"title\": \"AI/ML Developer\",\n    \"workType\": \"1\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        160,
+        -16
+      ],
+      "id": "ae333064-a7be-4abd-a96c-1acf42879d35",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -48,
+        -16
+      ],
+      "id": "0808b290-07fd-49ed-958d-40c78b63198a",
+      "name": "Wait",
+      "webhookId": "43bf4321-639a-4872-9008-10bbda488e03"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7305c5ea-6158-4ef6-a607-785f80df253c",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9b709ecef9751e58241ac015ce79c99e23722f41894bbf9141ed174f85153871"
+  },
+  "id": "f4G7WlmSHumm6O-pmjzXe",
+  "tags": []
+}

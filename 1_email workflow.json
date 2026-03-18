@@ -1,0 +1,66 @@
+{
+  "name": "1_email workflow",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        -16
+      ],
+      "id": "0caa91d5-eb78-4748-8142-1ae76128830a",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "sendTo": "aadarshkumart.18@gmail.com",
+        "subject": "It's working",
+        "emailType": "text",
+        "message": "The trigger is working.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        32,
+        -16
+      ],
+      "id": "048ccdd5-4d0c-496b-af02-876130d82545",
+      "name": "Send a message",
+      "webhookId": "e15f33e2-5a8c-4604-aafa-0d185895e813",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Fwq1RA9WspMlSuAa",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "42d86dc7-161a-4405-9ff1-8953928b2455",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2212aa35fd8089794634e1c875cf75025528b231c96420de4be41577f87ff8ac"
+  },
+  "id": "KqNl_a6rY7Idq5G34wzFV",
+  "tags": []
+}

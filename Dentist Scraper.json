@@ -1,0 +1,85 @@
+{
+  "name": "Dentist Scraper",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        16
+      ],
+      "id": "8ce26e14-de1d-45cc-b399-e348cab5c0d5",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/runs?token=apify_api_L1lx70zdvhV6iAVig0HwFgehgUTQTJ20RqxA",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n    \"includeWebResults\": false,\n    \"language\": \"en\",\n    \"locationQuery\": \"Lucknow, India\",\n    \"maxCrawledPlacesPerSearch\": 10,\n    \"maxImages\": 0,\n    \"maximumLeadsEnrichmentRecords\": 0,\n    \"scrapeContacts\": false,\n    \"scrapeDirectories\": false,\n    \"scrapeImageAuthors\": false,\n    \"scrapePlaceDetailPage\": false,\n    \"scrapeReviewsPersonalData\": true,\n    \"scrapeSocialMediaProfiles\": {\n        \"facebooks\": false,\n        \"instagrams\": false,\n        \"tiktoks\": false,\n        \"twitters\": false,\n        \"youtubes\": false\n    },\n    \"scrapeTableReservationProvider\": false,\n    \"searchStringsArray\": [\n        \"dentist\"\n    ],\n    \"skipClosedPlaces\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -416,
+        16
+      ],
+      "id": "419a4774-0939-4879-aadb-eaf46518a654",
+      "name": "POST_Run the actor"
+    },
+    {
+      "parameters": {
+        "url": "https://api.apify.com/v2/acts/compass~crawler-google-places/runs/last/dataset/items?token=apify_api_L1lx70zdvhV6iAVig0HwFgehgUTQTJ20RqxA",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -208,
+        16
+      ],
+      "id": "19df0aaf-96a5-45a5-8ad0-ff8c3f97e97b",
+      "name": "GET_Get the result"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "POST_Run the actor",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST_Run the actor": {
+      "main": [
+        [
+          {
+            "node": "GET_Get the result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a3791761-ac41-4536-95e4-b7e283da9956",
+  "meta": {
+    "instanceId": "9b709ecef9751e58241ac015ce79c99e23722f41894bbf9141ed174f85153871"
+  },
+  "id": "jC60VNMo9qSgeCxSUYbTO",
+  "tags": []
+}

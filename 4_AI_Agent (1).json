@@ -1,0 +1,200 @@
+{
+  "name": "4_AI_Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi, I'm an Event Booking Agent on Google Calendar. How can I help you?\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -192,
+        0
+      ],
+      "id": "77215eb7-d900-4a65-b4ae-57ec3da9bb26",
+      "name": "When chat message received",
+      "webhookId": "380b5941-16fd-4976-bf44-82f4034af577"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=#Role\nYou are a Google Calendar Scheduling AI Agent that helps to add, get, update or to delete the calendar events and after that send a confirmation message to the user on their respective email address.\n\n#What to do\n- Your responsibility is to understand the natural language scheduling requests and convert them into structured calendar event date that can be executed using calendar tools and book an events according to the requirement of the user.\n- After booking of an event on the calendar send a confirmation message or details to the particular user on there email using send a message tool.\n\n#Tools available\n- create new events: Use this tool when a new event has to be created.\n- send a message: Use this tool to send the confirmation message or details to the user.\n\n#Important note\n- current date and time: {{ $now }}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        16,
+        0
+      ],
+      "id": "f2500576-5a17-4550-9144-9c0b769a2b05",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        224
+      ],
+      "id": "d4817649-def2-44aa-8ecd-4a6d20729578",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "qfn2rE1Tja9O5jHU",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        224
+      ],
+      "id": "5053fdb8-e77d-4c55-8438-7af8f776eac8",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "adarshkumart88@gmail.com",
+          "mode": "list",
+          "cachedResultName": "adarshkumart88@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        224,
+        224
+      ],
+      "id": "9da52781-e7cb-4350-9321-8a0c0ec1ea7c",
+      "name": "Create new events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "xLFmgLNMGCUsUufu",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        400,
+        224
+      ],
+      "id": "cdcfb14f-08d3-4935-8e4d-856237dfe778",
+      "name": "Send a message",
+      "webhookId": "b36add9a-0085-4978-abc9-dd4833519f29",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "D3uKQPojHZnxvvTY",
+          "name": "Gmail account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create new events": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "55fc3293-dad5-4234-ac7f-389f71ab1726",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2212aa35fd8089794634e1c875cf75025528b231c96420de4be41577f87ff8ac"
+  },
+  "id": "6UmlIaf_NoZV7FAX_YVr8",
+  "tags": []
+}

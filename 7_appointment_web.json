@@ -1,0 +1,309 @@
+{
+  "name": "7_appointment_web",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "1ba37dde-7cc7-4dbf-8afb-2c87b449892a",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -384,
+        16
+      ],
+      "id": "91ca4f98-753b-4e1b-8e31-46c4d3562ced",
+      "name": "Webhook",
+      "webhookId": "1ba37dde-7cc7-4dbf-8afb-2c87b449892a"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "adarshkumart88@gmail.com",
+          "mode": "list",
+          "cachedResultName": "adarshkumart88@gmail.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        96,
+        240
+      ],
+      "id": "8d90f0d4-e21c-4d62-a388-3ef06d9bb96e",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "xbkxK37cNHAXJ6eo",
+          "name": "Google Calendar account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', ``, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.2,
+      "position": [
+        304,
+        240
+      ],
+      "id": "a44f6a4f-94ca-466c-85e9-7b85733f8488",
+      "name": "Send a message in Gmail",
+      "webhookId": "4350a963-a60c-48a6-b1ec-2ab95ef4e0ce",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "D3uKQPojHZnxvvTY",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-3-flash-preview",
+          "mode": "list",
+          "cachedResultName": "models/gemini-3-flash-preview"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=NAME:{{ $json.body.fullName }}\nAGE:{{ $json.body.age }}\nGENDER: {{ $json.body.gender }}\nMOBILE NO:{{ $json.body.mobile }}\nEMAIL:{{ $json.body.email }}\nSYMPTOMS:{{ $json.body.symptoms }}\nPREFERRED DATE:{{ $json.body.preferredDate }}\nPREFERRED DATE FORMATTED: {{ $json.body.preferredDateFormatted }}\nSELECTED TIME SLOT:{{ $json.body.selectedTimeSlot }}\n"
+            },
+            {
+              "content": "=You will get a patient details for appointment at Dr. Strange Physiotherapy Clinic. You just have to message the patient to there email address that you appointment is confirmed also send him the patient details as well as appointment details.",
+              "role": "model"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        -176,
+        16
+      ],
+      "id": "d5c2ff7a-03c3-4ab6-9ee0-a9ec56239f96",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "UorImZxWJBImwLdq",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mgpv7CAt_XIdzEumeETMzn3XZJnySb6GAyJ_2z_6Ndk",
+          "mode": "list",
+          "cachedResultName": "n8n user database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mgpv7CAt_XIdzEumeETMzn3XZJnySb6GAyJ_2z_6Ndk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 964124519,
+          "mode": "list",
+          "cachedResultName": "appointment data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mgpv7CAt_XIdzEumeETMzn3XZJnySb6GAyJ_2z_6Ndk/edit#gid=964124519"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "NAME": "={{ $json.body.fullName }}",
+            "AGE": "={{ $json.body.age }}",
+            "GENDER": "={{ $json.body.gender }}",
+            "MOBILE NO": "={{ $json.body.mobile }}",
+            "EMAIL": "={{ $json.body.email }}",
+            "WHAT'S THE PROBLRM": "={{ $json.body.symptoms }}",
+            "PREFERRED DATE": "={{ $json.body.preferredDate }}",
+            "PREFERRED DATE FORMAT": "={{ $json.body.preferredDateFormatted }}",
+            "SELECTED TIME SLOT": "={{ $json.body.selectedTimeSlot }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AGE",
+              "displayName": "AGE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GENDER",
+              "displayName": "GENDER",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MOBILE NO",
+              "displayName": "MOBILE NO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EMAIL",
+              "displayName": "EMAIL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "WHAT'S THE PROBLRM",
+              "displayName": "WHAT'S THE PROBLRM",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "PREFERRED DATE",
+              "displayName": "PREFERRED DATE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "PREFERRED DATE FORMAT",
+              "displayName": "PREFERRED DATE FORMAT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "SELECTED TIME SLOT",
+              "displayName": "SELECTED TIME SLOT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        -96,
+        240
+      ],
+      "id": "3500dc60-68be-476b-967e-cce55744988b",
+      "name": "Append row in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2OlB8DvTUNeWGuaX",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "ai_tool": [
+        [
+          {
+            "node": "Message a model",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Message a model",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Message a model",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "3771ab69-a0d2-4322-bdbd-7aa811d19586",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2212aa35fd8089794634e1c875cf75025528b231c96420de4be41577f87ff8ac"
+  },
+  "id": "vLzob85Mr7AkdPGVrZ3PB",
+  "tags": []
+}

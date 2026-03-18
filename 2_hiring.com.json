@@ -1,0 +1,296 @@
+{
+  "name": "2_hiring.com",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Hiring Form",
+        "formDescription": "Please fill out your basic details. If we get match we will connect with you as soon as possible. ",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "What is your Name?"
+            },
+            {
+              "fieldLabel": "What is your Age?",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "What is your Gender?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Male"
+                  },
+                  {
+                    "option": "Female"
+                  },
+                  {
+                    "option": "Others"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "What is your Email?",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "What is your Mobile Number?",
+              "fieldType": "number"
+            },
+            {
+              "fieldLabel": "What is your Education?"
+            },
+            {
+              "fieldLabel": "Which role you apply for?",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Front End Developer"
+                  },
+                  {
+                    "option": "Back End Developer"
+                  },
+                  {
+                    "option": "AI/ML Engineer"
+                  },
+                  {
+                    "option": "Data Analyst"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "What are your Skills?"
+            },
+            {
+              "fieldLabel": "Any Question?"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -272,
+        0
+      ],
+      "id": "f4112eee-5b1c-44f1-9070-7c9a6420b122",
+      "name": "On form submission",
+      "webhookId": "ca007e7e-9537-499b-b548-755fcd804ffa"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1mgpv7CAt_XIdzEumeETMzn3XZJnySb6GAyJ_2z_6Ndk",
+          "mode": "list",
+          "cachedResultName": "n8n user database",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mgpv7CAt_XIdzEumeETMzn3XZJnySb6GAyJ_2z_6Ndk/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "hiring data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mgpv7CAt_XIdzEumeETMzn3XZJnySb6GAyJ_2z_6Ndk/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "NAME": "={{ $json['What is your Name?'] }}",
+            "AGE": "={{ $json['What is your Age?'] }}",
+            "GENDER": "={{ $json['What is your Gender?'] }}",
+            "EMAIL": "={{ $json['What is your Email?'] }}",
+            "MOBILE NO": "={{ $json['What is your Mobile Number?'] }}",
+            "ROLE": "={{ $json['Which role you apply for?'] }}",
+            "SUBMITTED AT": "={{ $json.submittedAt }}",
+            "EDUCATION": "={{ $json['What is your Education?'] }}",
+            "SKILL": "={{ $json['What are your Skills?'] }}",
+            "ANY QUESTION?": "={{ $json['Any Question?'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "NAME",
+              "displayName": "NAME",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AGE",
+              "displayName": "AGE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "GENDER",
+              "displayName": "GENDER",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EMAIL",
+              "displayName": "EMAIL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "MOBILE NO",
+              "displayName": "MOBILE NO",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EDUCATION",
+              "displayName": "EDUCATION",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ROLE",
+              "displayName": "ROLE",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "SKILL",
+              "displayName": "SKILL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ANY QUESTION?",
+              "displayName": "ANY QUESTION?",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "SUBMITTED AT",
+              "displayName": "SUBMITTED AT",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -48,
+        0
+      ],
+      "id": "91c3f1c1-ec7b-4f47-b763-131a121857f3",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "2OlB8DvTUNeWGuaX",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.EMAIL }}",
+        "subject": "Thank you for registering - Hiring.com",
+        "emailType": "text",
+        "message": "=Hi {{ $json.NAME }}\n\nThank you for your submission. We've received the following details from you.\n\nName: {{ $json.NAME }}\nAge: {{ $json.AGE }}\nGender: {{ $json.GENDER }}\nEmail: {{ $json.EMAIL }}\nMobile No: {{ $json['MOBILE NO'] }}\nEducation: {{ $json['EDUCATION '] }}\nRole: {{ $json.ROLE }}\nSkills: {{ $json.SKILLS }}\n\nWe'll get in touch with you shortly.\n\nRegards\nTeam Hiring.com",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        160,
+        0
+      ],
+      "id": "4c147103-b362-4b72-9ce8-dcc15ea5c02f",
+      "name": "Send a message",
+      "webhookId": "8b630a93-361d-45b6-8ddf-1a6927998670",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Fwq1RA9WspMlSuAa",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "83b8b4e2-41c8-45d6-a6bc-362e14390a50",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2212aa35fd8089794634e1c875cf75025528b231c96420de4be41577f87ff8ac"
+  },
+  "id": "bU58lISCybT256Fzsz9dh",
+  "tags": []
+}
